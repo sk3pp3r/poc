@@ -3,10 +3,15 @@ provider "aws" {
   region = "${var.aws_region}"
 }
 
+/* Random ID for unique resource name */
+ resource "random_id" "unique-id" {
+   byte_length = 4
+}
+
 
 /* ELB for Web/Application Servers */
  resource "aw_elb" "web-elb" {
-   name = "elb-web-${var.environment}"
+   name = "elb-web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    security_groups = ["${aws_security_group.elb-sg.id}"]
 
    subnets = ["${aws_subnet.subnet.*.id}"]
@@ -31,13 +36,13 @@ provider "aws" {
    connection_draining_timeout = 400
 
    tags {
-     Name = "elb-web-${var.environment}"
+     Name = "elb-web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    }
  }
 
  /* Launch Configuration for Autoscalling Group */
  resource "aws_launch_configuration" "web-lc" {
-   name_prefix = "lc-web-${var.environment}-"
+   name_prefix = "lc-web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}-"
    image_id = "${var.aws_ami["${var.aws_region}"]}"
    instance_type = "${var.app_instance_type}"
    security_groups = ["${aws_security_group.default.id}"]
@@ -53,7 +58,7 @@ provider "aws" {
  data "template_file" "bootstrap" {
      template = "${file("files/bootstrap.sh")}"
      vars {
-         cluster_name = "web-${var.environment}"
+         cluster_name = "web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
          roles = "web"
          environment = "${var.environment}"
      }
@@ -63,7 +68,7 @@ provider "aws" {
  /* Autoscalling Group */
  resource "aws_autoscaling_group" "web-asg" {
    availability_zones = ["${var.availability_zones}"]
-   name = "asg-web-${var.environment}"
+   name = "asg-web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    max_size = "${var.asg_max}"
    min_size = "${var.asg_min}"
    desired_capacity = "${var.asg_desired}"
@@ -73,7 +78,7 @@ provider "aws" {
    vpc_zone_identifier = ["${aws_subnet.subnet.*.id}"]
    tag {
      key = "Name"
-     value = "web-${var.environment}"
+     value = "web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
      propagate_at_launch = "true"
    }
    tag {

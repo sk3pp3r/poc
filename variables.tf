@@ -38,3 +38,8 @@ variable "asg_max" {
 variable "asg_desired" {
   description = "Desired number of instancess in autoscalling group."
 }
+
+variable "full_name" {
+  description = "Your full name (without spaces)."
+}
+

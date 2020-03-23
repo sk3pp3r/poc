@@ -1,7 +1,7 @@
 
 /* Security Group for Ec2 Instances */
  resource "aws_security_group" "default" {
-   name = "sg_web_${var.environment}"
+   name = "sg_web_${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    vpc_id = "${aws_vpc.main.id}"
 
    # SSH access from anywhere
@@ -21,13 +21,13 @@
    }
 
    tags {
-     Name = "sg-ec2-web-${var.environment}"
+     Name = "sg-ec2-web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    }
  }
 
  /* Security Group for ELB */
  resource "aws_security_group" "elb-sg" {
-   name = "sg_elb_${var.environment}"
+   name = "sg_elb_${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    vpc_id = "${aws_vpc.main.id}"
 
    # HTTP access from anywhere
@@ -47,6 +47,6 @@
    }
 
    tags {
-     Name = "sg-elb-${var.environment}"
+     Name = "sg-elb-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    }
  }

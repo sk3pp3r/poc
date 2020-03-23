@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   cidr_block = "${var.cidr}"
 
   tags {
-    Name = "${var.vpc_name}"
+    Name = "${var.vpc_name}-${var.full_name}-${random_id.unique-id.hex}"
     CreatedBy = "Terraform"
   }
 }
@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
-    Name = "igw-${var.vpc_name}"
+    Name = "igw-${var.vpc_name}-${var.full_name}-${random_id.unique-id.hex}"
     CreatedBy = "Terraform"
   }
 }
@@ -35,6 +35,6 @@ resource "aws_subnet" "subnet" {
      availability_zone = "${element(var.availability_zones,count.index)}"
      map_public_ip_on_launch = true
      tags {
-         Name = "${join("-", list(element(var.availability_zones,count.index)))}"
+         Name = "${join("-", list(element(var.availability_zones,count.index)))}-${var.full_name}-${random_id.unique-id.hex}"
      }
 }
