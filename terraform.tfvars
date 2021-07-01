@@ -1,5 +1,5 @@
 environment = "example"
-availability_zones = ["ap-southeast-2a","ap-southeast-2b"]
+availability_zones = ["eu-west-1a","eu-west-1b"]
 app_instance_type = "t2.micro"
 asg_min = "1"
 asg_max = "2"
