@@ -10,6 +10,7 @@ variable "cidr" {
 }
 
 variable "aws_region" {
+  default = "eu-west-1"
   description = "The AWS region to create things in."
 }
 
@@ -40,6 +41,7 @@ variable "asg_desired" {
 }
 
 variable "full_name" {
+  default = "haimcohen"
   description = "Your full name (without spaces)."
 }
 
