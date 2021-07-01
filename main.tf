@@ -10,7 +10,7 @@ provider "aws" {
 
 
 /* ELB for Web/Application Servers */
- resource "aw_elb" "web-elb" {
+ resource "aws_elb" "web-elb" {
    name = "elb-web-${var.environment}-${var.full_name}-${random_id.unique-id.hex}"
    security_groups = ["${aws_security_group.elb-sg.id}"]
 
